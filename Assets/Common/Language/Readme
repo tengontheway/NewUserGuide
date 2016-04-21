@@ -1,0 +1,47 @@
+﻿多语言的实现，能动态切换游戏中的语言。
+
+>>> 实现功能:
+
+1.支持通过ID和Macro(宏)来获得内容
+2.支持csv表中设定一个宏区间，程序中可以根据区间来随机.策划可以动态的来添加、删除维护。
+
+int start = Lang.Instance.getIDByMacro("IM_LOADING_TIPS_BEGIN");
+int end = Lang.Instance.getIDByMacro("IM_LOADING_TIPS_END");
+
+string content = Lang.Instance.getLangByID(Random.Range(start, end));
+
+3.切换语言时,广播推送。UI中的Label、Sprite同步切换,需要定制其他实现的，重载OnLocalize函数.
+UIRoot.Broadcast("OnLocalize");
+
+>>> 具体配置:
+
+组成:
+Lang.cs 
+LanguageSelectionEx.cs 
+UILocalizeEx.cs 
+UILocalizeEditorEx.cs 
+lang.csv
+
+1.lang.csv
+需要创建lang.csv，前两行必须为ID和Macro,后面是对应的扩展语言。标题如下:
+ID	Macro	En	Cn ...
+
+2.游戏场景(.unity)中需要切换语言的对象(label、Sprite...),都需要挂载UILocalizeEx.cs脚本
+脚本配置中填写lang.csv中对应的Macro值即可
+
+3.LanguageSelectionEx.cs是用来弹出选择列表切换多语言的。
+
+>>> 约定规范:
+
+1.程序中引用的宏 IM_开头, IM_LOADING_TIPS_BEGIN
+2.场景中引用的宏 EM_开头, EM_ATTR_NAME
+3.UI按照区间来分, eg.EM_MAP_NAME、EM_ENDSCREEN_REWRD
+
+
+>>> 表格参照:
+
+ID	Macro					En												Cn
+100	IM_LOADING_TIPS_BEGIN	小提示：主界面中可以查看下次比赛的刷新时间哦				Chinese1
+101							小提示：首次参加新一轮比赛时都可以领取丰富的奖励			Chinese2
+102							小提示：据说抽角色时不停摇手机会提升抽取稀有角色的概率哟	Chinese3
+103	IM_LOADING_TIPS_END		小提示：不死才是取得高分的秘诀						Chinese10
